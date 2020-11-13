@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { fetchColors } from "../api/fetchColors";
 
 const initialColor = {
   color: "",
@@ -23,8 +24,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
-        axiosWithAuth()
-          .get("http://localhost:5000/api/colors")
+        fetchColors()
           .then((res) => {
             updateColors(res.data);
           })
@@ -50,7 +50,11 @@ const ColorList = ({ colors, updateColors }) => {
       <p>colors</p>
       <ul>
         {colors.map((color) => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li
+            key={color.color}
+            data-testid="color"
+            onClick={() => editColor(color)}
+          >
             <span>
               <span
                 className="delete"
